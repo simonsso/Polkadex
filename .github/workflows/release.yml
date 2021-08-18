@@ -21,7 +21,6 @@ jobs:
       - name: PackRelease
         run: |
            zip PolkadexNode.zip --junk-paths  target/release/polkadex-node customSpecRaw.json
-	   
       - name: Archive binary
         uses: actions/upload-artifact@v1
         with:
