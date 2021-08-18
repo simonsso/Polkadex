@@ -17,10 +17,7 @@ jobs:
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build Project
-        run: |
-	     touch target/release/polkadex-node
-	     echo ./scripts/init.sh && cargo build --release
-	     echo ./target/release/polkadex-node build-spec --chain local  >customSpecRaw.json
+        run:  install -d target/release/ && touch target/release/polkadex-node && ls  >customSpecRaw.json
       - name: PackRelease
         run: |
            zip PolkadexNode.zip --junk-paths  target/release/polkadex-node customSpecRaw.json
