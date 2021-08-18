@@ -17,7 +17,7 @@ jobs:
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build Project
-        run: cargo build --release && ./target/release/polkadex-node build-spec --chain local  >customSpecRaw.json
+        run: ./scripts/init.sh && cargo build --release && ./target/release/polkadex-node build-spec --chain local  >customSpecRaw.json
       - name: Archive binary
         uses: actions/upload-artifact@v1
         with:
