@@ -5,7 +5,7 @@ on:
       - 'CUST*'
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v2
       - name: Cache Rust Dependecies
@@ -17,15 +17,15 @@ jobs:
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build Project
-        run: ./scripts/init.sh && cargo build --release && ./target/release/polkadex-node build-spec --chain local  >customSpecRaw.json
+        run: ./scripts/init.sh &&rustup target add x86_64-apple-darwin --toolchain nightly-2021-05-11 && cargo build --release && ./target/release/polkadex-node build-spec --chain local  >customSpecRaw.json
       - name: PackRelease
         run: |
-           zip PolkadexNodeUbuntu.zip --junk-paths  target/release/polkadex-node customSpecRaw.json
+           zip PolkadexNodeMacOS.zip --junk-paths  target/release/polkadex-node customSpecRaw.json
       - name: Archive binary
         uses: actions/upload-artifact@v1
         with:
-          name: PolkadexNodeUbuntu.zip
-          path: PolkadexNodeUbuntu.zip
+          name: PolkadexNodeMacOS.zip
+          path: PolkadexNodeMacOS.zip
       - name: Archive chainspec
         uses: actions/upload-artifact@v1
         with:
@@ -48,8 +48,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: PolkadexNodeUbuntu.zip
-          asset_name: PolkadexNodeUbuntu.zip
+          asset_path: PolkadexNodeMacOS.zip
+          asset_name: PolkadexNodeMacOS.zip
           asset_content_type: application/octet-stream 
       - name: Upload Release chainspec
         id: upload-release-asset1 
