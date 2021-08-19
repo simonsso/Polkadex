@@ -7,7 +7,7 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     steps:
-    - name: Create Release
+      - name: Create Release
         id: create_release
         uses: actions/create-release@v1.0.0
         env:
@@ -18,7 +18,7 @@ jobs:
           draft: false
           prerelease: true
   buildMac:
-    runs-on: macOS-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - name: Cache Rust Dependecies
