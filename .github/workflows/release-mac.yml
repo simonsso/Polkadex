@@ -33,10 +33,13 @@ jobs:
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build Project
-        run: ./scripts/init.sh &&rustup target add x86_64-apple-darwin --toolchain nightly-2021-05-11 && echo ./target/release/polkadex-node build-spec --chain local  >customSpecRaw.json
+        run: |
+             ./scripts/init.sh
+             rustup target add x86_64-apple-darwin --toolchain nightly-2021-05-11
+             cargo build --release
       - name: PackRelease
         run: |
-           zip PolkadexNodeMacOS.zip --junk-paths  customSpecRaw.json
+           zip PolkadexNodeMacOS.zip --junk-paths target/release/polkadex-node docs/customSpecRaw.json
       - name: Archive binary
         uses: actions/upload-artifact@v1
         with:
@@ -66,10 +69,14 @@ jobs:
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build Project
-        run:  echo ./scripts/init.sh && echo cargo build --release && echo ./target/release/polkadex-node build-spec --chain local  >customSpecRaw.json
+        run: |
+            ./scripts/init.sh
+            cargo build --release
+            cat docs/customSpecRaw.json > customSpecRaw.json
+#         #  echo ./target/release/polkadex-node build-spec --chain local  >customSpecRaw.json
       - name: PackRelease
         run: |
-           zip PolkadexNodeUbuntu.zip --junk-paths  customSpecRaw.json
+           zip PolkadexNodeUbuntu.zip --junk-paths target/release/polkadex-node  docs/customSpecRaw.json
       - name: Archive binary
         uses: actions/upload-artifact@v1
         with:
@@ -79,7 +86,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: customSpecRaw.json
-          path: docs/customSpecRaw.json
+          path: customSpecRaw.json
       - name: Upload Release Asset
         id: upload-release-asset0 
         uses: actions/upload-release-asset@v1.0.1
